@@ -7,13 +7,20 @@ I am using the free tier capability of auth0 which supports at max 7000 users.<b
 
 It uses auth0-js package to implement auth0 sdk.<br/>
 
+## API
+
+Created public and private api with nodeJS (express)<br/>
+Private API security is set up with Auth0 <br/>
+Using jwt and jwtRSA for identification of access_token and issuer.<br/>
+
 ## Available Scripts
 
 In the project directory, you can run:
 
 ### `npm start`
 
-It start the project at 'localhost:3000'
+It start the client project at 'localhost:3000'<br/>
+Along with API Nodejs server at 'localhost:3001'<br/>
 
 ### `npm test`
 
