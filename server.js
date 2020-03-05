@@ -5,6 +5,7 @@ const express = require("express");
 require("dotenv").config();
 const jwt = require("express-jwt"); //Validate JWT and seq.user
 const jwksRsa = require("jwks-rsa"); //Retrieve RSA keys from a JSON web key set (JKWS)endpoint
+const checkScope = require("express-jwt-authz"); //validate JWT scopes
 
 const checkJwt = jwt({
   //Dynamically provide a signing key based on the Kid in the header
@@ -42,6 +43,32 @@ app.get("/private", checkJwt, function(req, res) {
   });
 });
 
+//Host getCources endpoint
+app.get("/cource", checkJwt, checkScope(["read:cources"]), function(req, res) {
+  res.json({
+    cources: [
+      { id: 1, title: "Building Apps with React and Redux" },
+      { id: 2, title: "Creating Reusable React Components" }
+    ]
+  });
+});
+//check Role express middleware
+function checkRoles(role) {
+  return function(req, res, next) {
+    const assignedRoles = req.user["http:localhost:3000/roles"];
+    if (Array.isArray(assignedRoles) && assignedRoles.includes(role)) {
+      return next();
+    } else {
+      return res.status(401).send("Insufficient role");
+    }
+  };
+}
+//Host Admin role endpoint
+app.get("/admin", checkJwt, checkRoles("admin"), function(req, res) {
+  res.json({
+    message: "Hello from admin API"
+  });
+});
 app.listen(3001);
 console.log(
   "PUBLIC API server listining on" + process.env.REACT_APP_AUTH0_AUDIENCE

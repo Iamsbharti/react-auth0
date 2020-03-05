@@ -7,7 +7,7 @@ import Auth from "./Auth/Auth";
 import Callback from "./Callback";
 import Public from "./Public";
 import Private from "./Private";
-
+import Cources from "./Cources";
 class App extends Component {
   constructor(props) {
     super(props);
@@ -47,6 +47,17 @@ class App extends Component {
                   <Profile auth={this.auth} {...props} />
                 ) : (
                   <Redirect to="/" />
+                )
+              }
+            />
+            <Route
+              path="/cource"
+              render={props =>
+                this.auth.isAuthenticated() &&
+                this.auth.userHasScopes(["read:cources"]) ? (
+                  <Cources auth={this.auth} {...props} />
+                ) : (
+                  this.auth.login()
                 )
               }
             />
